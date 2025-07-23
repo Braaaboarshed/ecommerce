@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
@@ -18,8 +19,7 @@ const shopReviewRouter = require("./routes/shop/review-routes");
 const commonFeatureRouter = require("./routes/common/feature-routes");
 
 // Database connection
-mongoose
-  .connect("mongodb://localhost:27017/ecommerce")
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
   .catch((error) => console.log(error));
 
@@ -30,11 +30,10 @@ const PORT = process.env.PORT || 5000;
 app.use(
   cors({
     origin: function (origin, callback) {
-      //     
       if (!origin || origin === "http://localhost:5173" || origin === "http://127.0.0.1:5173") {
-        callback(null, true); //  
+        callback(null, true);
       } else {
-        callback(new Error("Not allowed by CORS")); //        
+        callback(new Error("Not allowed by CORS"));
       }
     },
     methods: ["GET", "POST", "DELETE", "PUT"],
@@ -45,10 +44,9 @@ app.use(
       "Expires",
       "Pragma",
     ],
-    credentials: true, //  
+    credentials: true,
   })
 );
-
 
 // Middleware
 app.use(cookieParser());
